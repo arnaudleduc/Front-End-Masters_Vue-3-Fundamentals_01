@@ -28,7 +28,7 @@
       <h2>Want to add more character in the crew's list ?</h2>
       <div>
         <label for="newCrewMember">I wish this character was a crew member:</label>
-        <input type="text" v-model="newCrewMember">
+        <input type="text" v-model="newCrewMember" @keyup.enter="addCharacterToCrewMembers">
         <!--v-model est équivalant à écrire : v-bind:value="newCrewMember" v-on:input="changeInputValue" -->
         <button @click="addCharacterToCrewMembers">Add to the crew list</button>
       </div>
@@ -47,11 +47,11 @@
       const app = createApp({
         data() {
           return {
-            listOfFavoriteCrewMembers: [],
-            newCrewMember: "",
-            message: 'Here are the Mugiwara crew members :',
             emptyState: 'No members found',
-            listOfCrewMembers: ["Luffy", "Sanji", "Zoro", "Nami", "Chopper", "Usopp", "Franky", "Brook", "Robin", "Jinbei"]
+            listOfCrewMembers: ["Luffy", "Sanji", "Zoro", "Nami", "Chopper", "Usopp", "Franky", "Brook", "Robin", "Jinbei"],
+            listOfFavoriteCrewMembers: [],
+            message: 'Here are the Mugiwara crew members :',
+            newCrewMember: "",
           }
         },
       methods: {
@@ -63,6 +63,7 @@
         },
         addCharacterToCrewMembers() {
           this.listOfCrewMembers.push(this.newCrewMember);
+          this.newCrewMember = "";
         },
         // changeInputValue(event) {
         //   this.newCrewMember = event.target.value;
