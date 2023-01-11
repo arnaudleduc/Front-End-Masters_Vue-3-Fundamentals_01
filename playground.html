@@ -36,20 +36,20 @@
             listOfNumbers: [1, 2, 3, 4, 5]
           }
         },
-      computed: {
-        displayTitle() {
-          if (this.count >= 20) {
-            return 'Counter Standard - Very Long'
-          } else {
-            return 'Counter Standard'
+        computed: {
+          displayTitle() {
+            if (this.count >= 20) {
+              return 'Counter Standard - Very Long'
+            } else {
+              return 'Counter Standard'
+            }
+          }
+        },
+        methods: {
+          incrementCount() {
+            this.count += this.incrementAmount
           }
         }
-      },
-      methods: {
-        incrementCount() {
-          this.count += this.incrementAmount
-        }
-      }
     })
 
       app.mount('#app')

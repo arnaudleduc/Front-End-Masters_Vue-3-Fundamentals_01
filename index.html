@@ -13,29 +13,33 @@
       <h2 v-else>{{ message }}</h2>
       <ul>
         <li v-for="(member, index) in listOfCrewMembers">
-          <p>{{ member }}</p>
-          <button @click="addFavoriteToList(index)">Add to favorite</button>
+          <p>{{ member.name }}</p>
+          <button @click="addFavoriteToList(member)">&#11088 Add to favorite</button>
         </li>
       </ul>
+      <h2>Stats</h2>
+      <ul>
+        <li v-for="(stat, ability) in abilitiesStatistics">{{ ability }}: {{ stat }}</li>
+      </ul>
       <h2>Here is the list of your favorite members :</h2>
-      <p v-if="listOfFavoriteCrewMembers.length === 0">You haven't added a character to the list yet!</p>
-      <ul v-else>
+      <ul v-if="listOfFavoriteCrewMembers.length > 0">
         <li v-for="(member, index) in listOfFavoriteCrewMembers">
-          <p>{{ member }}</p>
+          <p>{{ member.name }}</p>
           <button @click="deleteFavoriteFromList(index)">Delete favorite</button>
         </li>
       </ul>
+      <p v-else>You haven't added a character to the list yet!</p>
       <h2>Want to add more character in the crew's list ?</h2>
       <div>
         <label for="newCrewMember">I wish this character was a crew member:</label>
-        <input type="text" v-model="newCrewMember" @keyup.enter="addCharacterToCrewMembers">
+        <input type="text" v-model="newCrewMember.name" @keyup.enter="addCharacterToCrewMembers">
         <!--v-model est équivalant à écrire : v-bind:value="newCrewMember" v-on:input="changeInputValue" -->
         <button @click="addCharacterToCrewMembers">Add to the crew list</button>
       </div>
-      <p>What if we want it to be displayed as a list ?</p>
+      <h2>What if we want it to be displayed as a list ?</h2>
       <p>
         <span v-for="(member, index) in listOfCrewMembers">
-          {{ member }}{{ index === listOfCrewMembers.length - 1 ? '' : ', ' }}
+          {{ member.name }}{{ index === listOfCrewMembers.length - 1 ? '' : ', ' }}
           <!-- Si l'index n'est pas égal à length - 1, affiche ', ' sinon affiche '' -->
         </span>
       </p>
@@ -48,22 +52,92 @@
         data() {
           return {
             emptyState: 'No members found',
-            listOfCrewMembers: ["Luffy", "Sanji", "Zoro", "Nami", "Chopper", "Usopp", "Franky", "Brook", "Robin", "Jinbei"],
+            listOfCrewMembers: [
+              {
+              name: 'Luffy',
+              ability: ['Devil fruit', 'Fighter']
+              },
+              {
+              name: 'Sanji',
+              ability: ['Fighter']
+              },
+              {
+              name: 'Zoro', 
+              ability: ['Swordsman', 'Fighter']
+              },
+              {
+              name: 'Nami', 
+              ability: ['Navigator']
+              },
+              {
+              name: 'Chopper',
+              ability: ['Devil fruit', 'Doctor', 'Fighter']
+              }
+              ],
             listOfFavoriteCrewMembers: [],
             message: 'Here are the Mugiwara crew members :',
-            newCrewMember: "",
+            newCrewMember: {
+              name: "",
+              ability: []
+            },
           }
         },
+      computed: {
+        // devilFruitUsersList() {
+        //   return this.listOfCrewMembers.filter
+        //   (member => member.ability.includes('Devil fruit')
+        //   )
+        // },
+        // fightersList() {
+        //   return this.listOfCrewMembers.filter
+        //   (member => member.ability.includes('Fighter')
+        //   )
+        // },
+        // swordsmenList() {
+        //   return this.listOfCrewMembers.filter
+        //   (member => member.ability.includes('Swordsman')
+        //   )
+        // },
+        // navigatorList() {
+        //   return this.listOfCrewMembers.filter
+        //   (member => member.ability.includes('Navigator')
+        //   )
+        // },
+        // doctorList() {
+        //   return this.listOfCrewMembers.filter
+        //   (member => member.ability.includes('Doctor')
+        //   )
+        // } Au lieu de répéter ces fonctions similaires :
+        abilitiesStatistics() {
+          const abilities = ['Devil fruit', 'Fighter', 'Swordsman', 'Navigator', 'Doctor'];
+          const statistics = {
+            'Devil fruit': 0,
+            'Fighter': 0,
+            'Swordsman': 0,
+            'Navigator': 0,
+            'Doctor': 0,
+          }
+
+          this.listOfCrewMembers.forEach(member => {
+            abilities.forEach(ability => {
+              if (member.ability.includes(ability))
+                statistics[ability] += 1;
+            })
+          })
+
+          return statistics;
+        }
+      },
       methods: {
-        addFavoriteToList(index) {
-          this.listOfFavoriteCrewMembers.push(this.listOfCrewMembers[index]);
+        addFavoriteToList(member) {
+          this.listOfFavoriteCrewMembers.push(member);
         },
         deleteFavoriteFromList(index) {
           this.listOfFavoriteCrewMembers.splice(index, 1);
         },
         addCharacterToCrewMembers() {
           this.listOfCrewMembers.push(this.newCrewMember);
-          this.newCrewMember = "";
+          this.newCrewMember = { name: "" };
         },
         // changeInputValue(event) {
         //   this.newCrewMember = event.target.value;
