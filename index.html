@@ -4,7 +4,73 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>My favorite TV Show</title>
   </head>
-  <body></body>
+  <body>
+    <h1>One Piece</h1>
+    <div id="app">
+      <h2 v-if="listOfCrewMembers.length === 0">{{ emptyState }}</h2>
+      <h2 v-else>{{ message }}</h2>
+      <ul>
+        <li v-for="(member, index) in listOfCrewMembers">
+          <p>{{ member }}</p>
+          <button @click="addFavoriteToList(index)">Add to favorite</button>
+        </li>
+      </ul>
+      <h2>Here is the list of your favorite members :</h2>
+      <p v-if="listOfFavoriteCrewMembers.length === 0">You haven't added a character to the list yet!</p>
+      <ul v-else>
+        <li v-for="(member, index) in listOfFavoriteCrewMembers">
+          <p>{{ member }}</p>
+          <button @click="deleteFavoriteFromList(index)">Delete favorite</button>
+        </li>
+      </ul>
+      <h2>Want to add more character in the crew's list ?</h2>
+      <div>
+        <label for="newCrewMember">I wish this character was a crew member:</label>
+        <input type="text" v-model="newCrewMember">
+        <!--v-model est équivalant à écrire : v-bind:value="newCrewMember" v-on:input="changeInputValue" -->
+        <button @click="addCharacterToCrewMembers">Add to the crew list</button>
+      </div>
+      <p>What if we want it to be displayed as a list ?</p>
+      <p>
+        <span v-for="(member, index) in listOfCrewMembers">
+          {{ member }}{{ index === listOfCrewMembers.length - 1 ? '' : ', ' }}
+          <!-- Si l'index n'est pas égal à length - 1, affiche ', ' sinon affiche '' -->
+        </span>
+      </p>
+    </div>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+      const { createApp } = Vue
+
+      const app = createApp({
+        data() {
+          return {
+            listOfFavoriteCrewMembers: [],
+            newCrewMember: "",
+            message: 'Here are the Mugiwara crew members :',
+            emptyState: 'No members found',
+            listOfCrewMembers: ["Luffy", "Sanji", "Zoro", "Nami", "Chopper", "Usopp", "Franky", "Brook", "Robin", "Jinbei"]
+          }
+        },
+      methods: {
+        addFavoriteToList(index) {
+          this.listOfFavoriteCrewMembers.push(this.listOfCrewMembers[index]);
+        },
+        deleteFavoriteFromList(index) {
+          this.listOfFavoriteCrewMembers.splice(index, 1);
+        },
+        addCharacterToCrewMembers() {
+          this.listOfCrewMembers.push(this.newCrewMember);
+        },
+        // changeInputValue(event) {
+        //   this.newCrewMember = event.target.value;
+        // } Pas nécessaire grâce à v-model :)
+      }
+      })
+
+      app.mount('#app')
+    </script>
+  </body>
 </html>

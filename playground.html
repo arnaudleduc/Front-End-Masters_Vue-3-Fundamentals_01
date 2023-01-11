@@ -9,7 +9,15 @@
   <body>
     <h1>Hi</h1>
     <div id="app">
-      <p v-if="message.length % 2 == 0">Even: {{ message }}</p>
+      <h1>Counter</h1>
+      <p>{{ count }}</p>
+      <button @click="incrementCount">Increment Count</button>
+      <div>
+        <label for="incrementAmount">Increment by:</label>
+        <input type="number" v-model="incrementAmount">
+      </div>
+      <hr>
+      <p v-if="message.length % 2 === 0">Even: {{ message }}</p>
       <p v-else>Odd: {{ message.toUpperCase() }}</p>
       <ul>
         <li v-for="number in listOfNumbers">{{ number }}</li>
@@ -22,11 +30,18 @@
       const app = createApp({
         data() {
           return {
+            count: 10,
+            incrementAmount: 1,
             message: 'Hello it works!',
             listOfNumbers: [1, 2, 3, 4, 5]
           }
+        },
+      methods: {
+        incrementCount() {
+          this.count += this.incrementAmount
         }
-      })
+      }
+    })
 
       app.mount('#app')
     </script>
